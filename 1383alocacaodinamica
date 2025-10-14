@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int **sudoku;
+
+int verificaLinha(int x) {
+    int *numeros = (int *)calloc(10, sizeof(int));
+
+    for (int i = 0; i < 9; ++i) {
+        if (numeros[sudoku[x][i]]) {
+            free(numeros);
+            return 0;
+        }
+        numeros[sudoku[x][i]] += 1;
+    }
+
+    free(numeros);
+    return 1;
+}
+
+int verificaColuna(int x) {
+    int *numeros = (int *)calloc(10, sizeof(int));
+
+    for (int i = 0; i < 9; ++i) {
+        if (numeros[sudoku[i][x]]) {
+            free(numeros);
+            return 0;
+        }
+        numeros[sudoku[i][x]] += 1;
+    }
+
+    free(numeros);
+    return 1;
+}
+
+int verificaQuadrado(int x) {
+    int *numeros = (int *)calloc(10, sizeof(int));
+    int linha = 3 * (x / 3), coluna = 3 * (x % 3);
+
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            if (numeros[sudoku[linha + i][coluna + j]]) {
+                free(numeros);
+                return 0;
+            }
+            numeros[sudoku[linha + i][coluna + j]] += 1;
+        }
+    }
+
+    free(numeros);
+    return 1;
+}
+
+int main() {
+    int n;
+    char *resposta;
+
+    // Aloca dinamicamente o tabuleiro 9x9
+    sudoku = (int **)malloc(9 * sizeof(int *));
+    for (int i = 0; i < 9; ++i)
+        sudoku[i] = (int *)malloc(9 * sizeof(int));
+
+    scanf("%d", &n);
+
+    for (int k = 1; k <= n; ++k) {
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                scanf("%d", &sudoku[i][j]);
+            }
+        }
+
+        printf("Instancia %d\n", k);
+
+        resposta = "SIM";
+        for (int i = 0; i < 9; ++i) {
+            if (!verificaLinha(i) || !verificaColuna(i) || !verificaQuadrado(i)) {
+                resposta = "NAO";
+                break;
+            }
+        }
+
+        printf("%s\n\n", resposta);
+    }
+
+    // Libera a memória alocada
+    for (int i = 0; i < 9; ++i)
+        free(sudoku[i]);
+    free(sudoku);
+
+    return 0;
+}
