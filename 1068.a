@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 1000
+
+int main() {
+    char expressao[MAX + 1];
+    
+    // Lê até o fim do arquivo (EOF)
+    while (fgets(expressao, sizeof(expressao), stdin)) {
+        int pilha[MAX];
+        int topo = -1;
+        int incorreto = 0;
+
+        for (int i = 0; expressao[i] != '\0'; i++) {
+            if (expressao[i] == '(') {
+                // Empilha
+                if (topo < MAX - 1)
+                    pilha[++topo] = '(';
+            } else if (expressao[i] == ')') {
+                // Desempilha
+                if (topo >= 0)
+                    topo--;
+                else {
+                    incorreto = 1;
+                    break;
+                }
+            }
+        }
+
+        if (topo == -1 && !incorreto)
+            printf("correct\n");
+        else
+            printf("incorrect\n");
+    }
+
+    return 0;
+}
