@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+int main() {
+    int n;
+
+    while (1) {
+        scanf("%d", &n);
+        if (n == 0) break; 
+
+        int fila[51];
+        int inicio = 0, fim = 0;
+
+        
+        for (int i = 1; i <= n; i++)
+            fila[fim++] = i;
+
+        printf("Discarded cards:");
+
+        
+        while (fim - inicio > 1) {
+            
+            printf("%s %d", (inicio == 0) ? "" : ",", fila[inicio++]);
+
+            
+            fila[fim++] = fila[inicio++];
+        }
+
+        printf("\nRemaining card: %d\n", fila[inicio]);
+    }
+
+    return 0;
+}
